@@ -38,7 +38,6 @@ class SqliteHelper {
         sqlite3_prepare(file, q, -1, &add, nil)
         sqlite3_step(add)
         print("add data")
-        
     }
     
     static func getData(){
@@ -64,7 +63,6 @@ class SqliteHelper {
         sqlite3_prepare(file, q, -1, &update, nil)
         sqlite3_step(update)
         print("Update data")
-        
     }
     
     static func deleteData(grid : Int){
