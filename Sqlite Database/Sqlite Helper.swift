@@ -39,6 +39,36 @@ class SqliteHelper {
         sqlite3_step(add)
         print("add data")
     }
+
+    static func addData(grid: Int, name: String, surName: String) {
+        var checkStmt: OpaquePointer?
+        let checkQuery = "SELECT * FROM students WHERE grid = \(grid)"
+
+        if sqlite3_prepare_v2(file, checkQuery, -1, &checkStmt, nil) == SQLITE_OK {
+            if sqlite3_step(checkStmt) == SQLITE_ROW {
+                print("ID \(grid) already exists.")
+                sqlite3_finalize(checkStmt)
+                return
+            }
+        } else {
+            print("Failed to prepare check statement.")
+        }
+        sqlite3_finalize(checkStmt)
+
+        // Proceed to insert
+        let insertQuery = "INSERT INTO students VALUES (\(grid), '\(name)', '\(surName)')"
+        var insertStmt: OpaquePointer?
+        if sqlite3_prepare_v2(file, insertQuery, -1, &insertStmt, nil) == SQLITE_OK {
+            if sqlite3_step(insertStmt) == SQLITE_DONE {
+                print("Data added.")
+            } else {
+                print("Insert failed.")
+            }
+        } else {
+            print("Failed to prepare insert statement.")
+        }
+        sqlite3_finalize(insertStmt)
+    }
     
     static func getData(){
         let q = "SELECT * FROM Students"
